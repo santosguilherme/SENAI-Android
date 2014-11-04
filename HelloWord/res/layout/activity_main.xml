@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/botaoCentral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ir para próxima página" />
+
+    <Button
+        android:id="@+id/botaoNavegador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="abrirNavegador"
+        android:text="Abrir Navegador" />
+
+    <Button
+        android:id="@+id/botaoLigacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="fazerLigacao"
+        android:text="Ligação" />
+    
+       <Button
+        android:id="@+id/botaoAgenda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="abrirAgenda"
+        android:text="Agenda de Contatos" />
+
+</LinearLayout>
