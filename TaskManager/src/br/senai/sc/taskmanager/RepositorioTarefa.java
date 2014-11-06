@@ -100,7 +100,6 @@ public class RepositorioTarefa {
 		return this.db.delete(TABELA_TAREFA, where, whereArgs);
 	}
 
-
 	public void fechar() {
 		if(this.db != null){
 			this.db.close();
@@ -109,5 +108,4 @@ public class RepositorioTarefa {
 			dbHelper.close();
 		}
 	}
-
 }

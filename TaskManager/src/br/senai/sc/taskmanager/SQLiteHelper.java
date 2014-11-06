@@ -29,5 +29,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		dataBase.execSQL(this.scriptSQLDelete);
 		onCreate(dataBase);
 	}
-
 }

@@ -1,14 +1,10 @@
 package br.senai.sc.taskmanager;
 
-import java.util.Date;
-
-import br.senai.sc.taskmanager.Tarefa.Tarefas;
+import java.util.Calendar;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,9 +19,19 @@ public class CadastroTarefa extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cadastro_tarefa);
+		( (TimePicker) findViewById(R.id.input_hora)).setIs24HourView(true);
 	}
 
 	public void agendarTarefa(View view) {
+		Tarefa tarefa = recuperarTarefaDaView();
+		tarefa = ListaTarefas.repositorio.salvar(tarefa);
+
+		agendarNotificacao(tarefa);
+		startActivityForResult(new Intent(this, ListaTarefas.class), RESULT_OK);
+		Toast.makeText(getApplicationContext(), "Tarefa agendada", Toast.LENGTH_SHORT).show();
+	}
+
+	private Tarefa recuperarTarefaDaView() {
 		Tarefa tarefa = new Tarefa();
 
 		EditText titulo = (EditText) findViewById(R.id.input_titulo);
@@ -43,44 +49,22 @@ public class CadastroTarefa extends Activity {
 		int horas = horaMinuto.getCurrentHour();
 		int minutos = horaMinuto.getCurrentMinute();
 
-		tarefa.lembrete = new Date(ano, mes, dia, horas, minutos).getTime();
-
-		tarefa = ListaTarefas.repositorio.salvar(tarefa);
-
-		agendarNotificacao(tarefa.id, tarefa.lembrete, tarefa.titulo, tarefa.descricao);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(ano, mes, dia, horas, minutos, 0);
 		
-		startActivityForResult(new Intent(this, ListaTarefas.class), RESULT_OK);
-
-		Toast.makeText(getApplicationContext(), "Tarefa agendada", Toast.LENGTH_SHORT).show();
-
+		tarefa.lembrete = calendar.getTimeInMillis();
+		
+		return tarefa;
 	}
 
-	public void agendarNotificacao(long tarefaId, long when, String tituloNotificacao, String descricaoNotificacao){
-		String tickerText = "Tarefa agendada para agora!";
-    	String mensagem = descricaoNotificacao.concat(" \n(Clique para deletá-la!)");
-    	Intent intent = new Intent("NOME_DA_ACAO");
-    	intent.putExtra(Tarefas._ID, tarefaId);
-    	
-    	notificar(this, R.drawable.ic_launcher, tickerText, tituloNotificacao, mensagem, intent, when);
-	}
 	
-	public void notificar(Context ctx, int imagem, String ticker, String titulo, String msg, Intent intent, long quando){
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		//PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, activity), 0);
-		//PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, 0, new Intent("NOME_DA_ACAO"), 0);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+	private void agendarNotificacao(final Tarefa tarefa){
+		Intent intencao = new Intent("ALARME_NOTIFICACAO_TAREFA");
+		intencao.putExtra(Tarefa.KEY, tarefa);
 
-		Notification notification = new Notification.Builder(ctx)
-		.setTicker(ticker)
-		.setContentTitle(titulo)
-		.setSmallIcon(imagem)
-		.setContentText(msg)
-		.setContentIntent(pendingIntent)
-		.setWhen(quando)
-		.setAutoCancel(true)
-		.build();
-
-		notificationManager.notify(R.string.app_name, notification);
-
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intencao, 0);
+		
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, tarefa.lembrete, pendingIntent);
 	}
 }

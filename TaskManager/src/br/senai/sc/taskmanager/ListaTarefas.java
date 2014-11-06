@@ -27,11 +27,16 @@ public class ListaTarefas extends ListActivity {
 		registerForContextMenu(getListView());
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		atualizarTarefas();
+	}
+	
 	private void atualizarTarefas() {
 		this.tarefas = repositorio.listarTarefas();
 		setListAdapter(new TarefaListAdapter(this, this.tarefas));
 	}
-	
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
@@ -64,7 +69,6 @@ public class ListaTarefas extends ListActivity {
 		return true;
 	}
 	
-
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		super.onMenuItemSelected(featureId, item);

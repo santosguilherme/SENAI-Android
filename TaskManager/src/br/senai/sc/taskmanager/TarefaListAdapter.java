@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class TarefaListAdapter extends BaseAdapter {
 		return getItem(position).id;
 	}
 
+	@SuppressLint({ "ViewHolder", "InflateParams", "SimpleDateFormat" }) 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Tarefa tarefa = (Tarefa) getItem(position);

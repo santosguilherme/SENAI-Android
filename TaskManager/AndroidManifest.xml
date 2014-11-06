@@ -26,6 +26,22 @@
             android:name=".CadastroTarefa"
             android:label="@string/title_activity_cadastro_tarefa" >
         </activity>
+
+        <receiver android:name=".AlarmNotificacaoReceiver" >
+            <intent-filter>
+                <action android:name="ALARME_NOTIFICACAO_TAREFA" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+        
+        <receiver android:name=".AlarmRemoverTarefaReceiver" >
+            <intent-filter>
+                <action android:name="REMOVER_TAREFA" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
