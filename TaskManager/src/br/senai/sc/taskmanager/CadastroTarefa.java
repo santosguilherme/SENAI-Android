@@ -53,7 +53,6 @@ public class CadastroTarefa extends Activity {
 		calendar.set(ano, mes, dia, horas, minutos, 0);
 		
 		tarefa.lembrete = calendar.getTimeInMillis();
-		
 		return tarefa;
 	}
 
